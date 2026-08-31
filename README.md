@@ -8,8 +8,6 @@ Regra de negócio:
 - BAIXA: somente os clientes PREMIUM são notificados
 - SEM_ALTERACAO: nenhum cliente é notificado
 
-Os clientes ficam em memória (João como COMUM e Maria como PREMIUM). Não há banco de dados, autenticação nem frontend.
-
 ## Como rodar
 
 Pré-requisitos: Java 21 e Maven.
@@ -20,7 +18,7 @@ Para iniciar a aplicação:
 
 A aplicação sobe em http://localhost:8080
 
-Ao abrir a raiz no navegador, você é redirecionado automaticamente para a documentação interativa (Swagger UI). É possível testar os endpoints por lá, pelo botão Try it out.
+Ao abrir a raiz no navegador, você é redirecionado automaticamente para o Swagger.
 
 Para rodar os testes:
 
