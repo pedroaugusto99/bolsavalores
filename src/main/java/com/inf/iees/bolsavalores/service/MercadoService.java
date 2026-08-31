@@ -1,14 +1,10 @@
 package com.inf.iees.bolsavalores.service;
 
-import com.inf.iees.bolsavalores.integracao.IntegracaoBolsa;
-import com.inf.iees.bolsavalores.modelo.Bolsa;
 import com.inf.iees.bolsavalores.modelo.Cliente;
+import com.inf.iees.bolsavalores.modelo.EventoMercado;
 import com.inf.iees.bolsavalores.modelo.TipoCliente;
 import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,30 +14,30 @@ public class MercadoService {
             new Cliente("João", TipoCliente.COMUM),
             new Cliente("Maria", TipoCliente.PREMIUM));
 
-    private final Map<Bolsa, IntegracaoBolsa> integracoes;
-
-    public MercadoService(List<IntegracaoBolsa> integracoesDisponiveis) {
-        this.integracoes = integracoesDisponiveis.stream()
-                .collect(Collectors.toMap(IntegracaoBolsa::getBolsa, Function.identity()));
-    }
-
-    public void processarEventoMercado(Bolsa bolsa, VariacaoMercado variacao) {
-        if (variacao == VariacaoMercado.SEM_ALTERACAO) {
-            return;
+    public List<Cliente> processarEventoMercado(EventoMercado evento) {
+        if (evento.variacao() == VariacaoMercado.SEM_ALTERACAO) {
+            return List.of();
         }
 
-        String mensagemMercado = integracoes.get(bolsa).obterMensagemMercado(variacao);
+        List<Cliente> clientesNotificados = CLIENTES.stream()
+                .filter(cliente -> deveNotificar(cliente, evento.variacao()))
+                .toList();
 
-        CLIENTES.stream()
-                .filter(cliente -> deveNotificar(cliente, variacao))
-                .forEach(cliente -> notificar(cliente, mensagemMercado));
+        clientesNotificados.forEach(cliente -> notificar(cliente, evento));
+
+        return clientesNotificados;
     }
 
     private boolean deveNotificar(Cliente cliente, VariacaoMercado variacao) {
         return variacao == VariacaoMercado.ALTA || cliente.tipo() == TipoCliente.PREMIUM;
     }
 
-    private void notificar(Cliente cliente, String mensagemMercado) {
-        System.out.println("Notificando " + cliente.nome() + ": " + mensagemMercado + ".");
+    private void notificar(Cliente cliente, EventoMercado evento) {
+        System.out.println("Notificando " + cliente.nome() + ": " + descrever(evento) + ".");
+    }
+
+    private String descrever(EventoMercado evento) {
+        return evento.bolsa() + " está em "
+                + (evento.variacao() == VariacaoMercado.ALTA ? "alta" : "baixa");
     }
 }

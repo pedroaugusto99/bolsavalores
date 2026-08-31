@@ -1,42 +1,30 @@
 package com.inf.iees.bolsavalores.integracao;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import com.inf.iees.bolsavalores.dto.BovespaEventoRequest;
+import com.inf.iees.bolsavalores.modelo.Bolsa;
+import com.inf.iees.bolsavalores.modelo.EventoMercado;
 import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class BovespaAdapterTest {
 
-    @Mock
-    private BovespaClient bovespaClient;
-
-    @InjectMocks
-    private BovespaAdapter bovespaAdapter;
+    private final BovespaAdapter bovespaAdapter = new BovespaAdapter();
 
     @Test
-    void deveEnviarCodigoPositivoParaBovespaQuandoMercadoEstiverEmAlta() {
-        when(bovespaClient.publicarEventoBovespa(1)).thenReturn("BOVESPA está em alta");
+    void deveConverterVariacaoAltaParaEventoDaBovespa() {
+        EventoMercado evento = bovespaAdapter.paraEventoMercado(
+                new BovespaEventoRequest(VariacaoMercado.ALTA));
 
-        String mensagemMercado = bovespaAdapter.obterMensagemMercado(VariacaoMercado.ALTA);
-
-        verify(bovespaClient).publicarEventoBovespa(1);
-        assertThat(mensagemMercado).isEqualTo("BOVESPA está em alta");
+        assertThat(evento).isEqualTo(new EventoMercado(Bolsa.BOVESPA, VariacaoMercado.ALTA));
     }
 
     @Test
-    void deveEnviarCodigoNegativoParaBovespaQuandoMercadoEstiverEmBaixa() {
-        when(bovespaClient.publicarEventoBovespa(-1)).thenReturn("BOVESPA está em baixa");
+    void deveConverterVariacaoBaixaParaEventoDaBovespa() {
+        EventoMercado evento = bovespaAdapter.paraEventoMercado(
+                new BovespaEventoRequest(VariacaoMercado.BAIXA));
 
-        String mensagemMercado = bovespaAdapter.obterMensagemMercado(VariacaoMercado.BAIXA);
-
-        verify(bovespaClient).publicarEventoBovespa(-1);
-        assertThat(mensagemMercado).isEqualTo("BOVESPA está em baixa");
+        assertThat(evento).isEqualTo(new EventoMercado(Bolsa.BOVESPA, VariacaoMercado.BAIXA));
     }
 }

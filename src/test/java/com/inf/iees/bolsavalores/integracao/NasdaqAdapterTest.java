@@ -1,42 +1,39 @@
 package com.inf.iees.bolsavalores.integracao;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
+import com.inf.iees.bolsavalores.dto.MovimentoNasdaq;
+import com.inf.iees.bolsavalores.dto.NasdaqEventoRequest;
+import com.inf.iees.bolsavalores.modelo.Bolsa;
+import com.inf.iees.bolsavalores.modelo.EventoMercado;
 import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class NasdaqAdapterTest {
 
-    @Mock
-    private NasdaqClient nasdaqClient;
-
-    @InjectMocks
-    private NasdaqAdapter nasdaqAdapter;
+    private final NasdaqAdapter nasdaqAdapter = new NasdaqAdapter();
 
     @Test
-    void deveEnviarStatusDeAltaParaNasdaqQuandoMercadoEstiverEmAlta() {
-        when(nasdaqClient.enviarMensagemNasdaq("RISE")).thenReturn("NASDAQ está em alta");
+    void deveConverterMovimentoUpParaAltaDaNasdaq() {
+        EventoMercado evento = nasdaqAdapter.paraEventoMercado(
+                new NasdaqEventoRequest(MovimentoNasdaq.UP));
 
-        String mensagemMercado = nasdaqAdapter.obterMensagemMercado(VariacaoMercado.ALTA);
-
-        verify(nasdaqClient).enviarMensagemNasdaq("RISE");
-        assertThat(mensagemMercado).isEqualTo("NASDAQ está em alta");
+        assertThat(evento).isEqualTo(new EventoMercado(Bolsa.NASDAQ, VariacaoMercado.ALTA));
     }
 
     @Test
-    void deveEnviarStatusDeBaixaParaNasdaqQuandoMercadoEstiverEmBaixa() {
-        when(nasdaqClient.enviarMensagemNasdaq("FALL")).thenReturn("NASDAQ está em baixa");
+    void deveConverterMovimentoDownParaBaixaDaNasdaq() {
+        EventoMercado evento = nasdaqAdapter.paraEventoMercado(
+                new NasdaqEventoRequest(MovimentoNasdaq.DOWN));
 
-        String mensagemMercado = nasdaqAdapter.obterMensagemMercado(VariacaoMercado.BAIXA);
+        assertThat(evento).isEqualTo(new EventoMercado(Bolsa.NASDAQ, VariacaoMercado.BAIXA));
+    }
 
-        verify(nasdaqClient).enviarMensagemNasdaq("FALL");
-        assertThat(mensagemMercado).isEqualTo("NASDAQ está em baixa");
+    @Test
+    void deveConverterMovimentoUnchangedParaSemAlteracaoDaNasdaq() {
+        EventoMercado evento = nasdaqAdapter.paraEventoMercado(
+                new NasdaqEventoRequest(MovimentoNasdaq.UNCHANGED));
+
+        assertThat(evento).isEqualTo(new EventoMercado(Bolsa.NASDAQ, VariacaoMercado.SEM_ALTERACAO));
     }
 }

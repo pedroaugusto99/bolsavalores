@@ -1,25 +1,24 @@
 package com.inf.iees.bolsavalores.integracao;
 
+import com.inf.iees.bolsavalores.dto.MovimentoNasdaq;
+import com.inf.iees.bolsavalores.dto.NasdaqEventoRequest;
 import com.inf.iees.bolsavalores.modelo.Bolsa;
+import com.inf.iees.bolsavalores.modelo.EventoMercado;
 import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NasdaqAdapter implements IntegracaoBolsa {
+public class NasdaqAdapter {
 
-    private final NasdaqClient nasdaqClient;
-
-    public NasdaqAdapter(NasdaqClient nasdaqClient) {
-        this.nasdaqClient = nasdaqClient;
+    public EventoMercado paraEventoMercado(NasdaqEventoRequest request) {
+        return new EventoMercado(Bolsa.NASDAQ, converter(request.movement()));
     }
 
-    @Override
-    public Bolsa getBolsa() {
-        return Bolsa.NASDAQ;
-    }
-
-    @Override
-    public String obterMensagemMercado(VariacaoMercado variacao) {
-        return nasdaqClient.enviarMensagemNasdaq(variacao == VariacaoMercado.ALTA ? "RISE" : "FALL");
+    private VariacaoMercado converter(MovimentoNasdaq movimento) {
+        return switch (movimento) {
+            case UP -> VariacaoMercado.ALTA;
+            case DOWN -> VariacaoMercado.BAIXA;
+            case UNCHANGED -> VariacaoMercado.SEM_ALTERACAO;
+        };
     }
 }

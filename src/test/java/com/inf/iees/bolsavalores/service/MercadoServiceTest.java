@@ -2,11 +2,10 @@ package com.inf.iees.bolsavalores.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.inf.iees.bolsavalores.integracao.BovespaAdapter;
-import com.inf.iees.bolsavalores.integracao.BovespaClient;
-import com.inf.iees.bolsavalores.integracao.NasdaqAdapter;
-import com.inf.iees.bolsavalores.integracao.NasdaqClient;
 import com.inf.iees.bolsavalores.modelo.Bolsa;
+import com.inf.iees.bolsavalores.modelo.Cliente;
+import com.inf.iees.bolsavalores.modelo.EventoMercado;
+import com.inf.iees.bolsavalores.modelo.TipoCliente;
 import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -18,6 +17,10 @@ import org.junit.jupiter.api.Test;
 
 class MercadoServiceTest {
 
+    private static final Cliente JOAO = new Cliente("João", TipoCliente.COMUM);
+
+    private static final Cliente MARIA = new Cliente("Maria", TipoCliente.PREMIUM);
+
     private final ByteArrayOutputStream notificacoes = new ByteArrayOutputStream();
 
     private PrintStream saidaOriginal;
@@ -28,9 +31,7 @@ class MercadoServiceTest {
     void prepararCenario() {
         saidaOriginal = System.out;
         System.setOut(new PrintStream(notificacoes, true, StandardCharsets.UTF_8));
-        mercadoService = new MercadoService(List.of(
-                new NasdaqAdapter(new NasdaqClient()),
-                new BovespaAdapter(new BovespaClient())));
+        mercadoService = new MercadoService();
     }
 
     @AfterEach
@@ -40,8 +41,10 @@ class MercadoServiceTest {
 
     @Test
     void deveNotificarTodosClientesQuandoNasdaqEstiverEmAlta() {
-        mercadoService.processarEventoMercado(Bolsa.NASDAQ, VariacaoMercado.ALTA);
+        List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(
+                new EventoMercado(Bolsa.NASDAQ, VariacaoMercado.ALTA));
 
+        assertThat(clientesNotificados).containsExactlyInAnyOrder(JOAO, MARIA);
         assertThat(notificacoesEnviadas())
                 .containsExactlyInAnyOrder(
                         "Notificando João: NASDAQ está em alta.",
@@ -50,16 +53,20 @@ class MercadoServiceTest {
 
     @Test
     void deveNotificarSomenteClientesPremiumQuandoNasdaqEstiverEmBaixa() {
-        mercadoService.processarEventoMercado(Bolsa.NASDAQ, VariacaoMercado.BAIXA);
+        List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(
+                new EventoMercado(Bolsa.NASDAQ, VariacaoMercado.BAIXA));
 
+        assertThat(clientesNotificados).containsExactly(MARIA);
         assertThat(notificacoesEnviadas())
                 .containsExactly("Notificando Maria: NASDAQ está em baixa.");
     }
 
     @Test
     void deveNotificarTodosClientesQuandoBovespaEstiverEmAlta() {
-        mercadoService.processarEventoMercado(Bolsa.BOVESPA, VariacaoMercado.ALTA);
+        List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(
+                new EventoMercado(Bolsa.BOVESPA, VariacaoMercado.ALTA));
 
+        assertThat(clientesNotificados).containsExactlyInAnyOrder(JOAO, MARIA);
         assertThat(notificacoesEnviadas())
                 .containsExactlyInAnyOrder(
                         "Notificando João: BOVESPA está em alta.",
@@ -68,16 +75,20 @@ class MercadoServiceTest {
 
     @Test
     void deveNotificarSomenteClientesPremiumQuandoBovespaEstiverEmBaixa() {
-        mercadoService.processarEventoMercado(Bolsa.BOVESPA, VariacaoMercado.BAIXA);
+        List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(
+                new EventoMercado(Bolsa.BOVESPA, VariacaoMercado.BAIXA));
 
+        assertThat(clientesNotificados).containsExactly(MARIA);
         assertThat(notificacoesEnviadas())
                 .containsExactly("Notificando Maria: BOVESPA está em baixa.");
     }
 
     @Test
     void naoDeveNotificarNenhumClienteQuandoNaoHouverAlteracao() {
-        mercadoService.processarEventoMercado(Bolsa.NASDAQ, VariacaoMercado.SEM_ALTERACAO);
+        List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(
+                new EventoMercado(Bolsa.NASDAQ, VariacaoMercado.SEM_ALTERACAO));
 
+        assertThat(clientesNotificados).isEmpty();
         assertThat(notificacoesEnviadas()).isEmpty();
     }
 
