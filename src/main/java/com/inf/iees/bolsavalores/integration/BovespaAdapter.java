@@ -1,8 +1,8 @@
-package com.inf.iees.bolsavalores.integracao;
+package com.inf.iees.bolsavalores.integration;
 
 import com.inf.iees.bolsavalores.dto.BovespaEventoRequest;
-import com.inf.iees.bolsavalores.modelo.Bolsa;
-import com.inf.iees.bolsavalores.modelo.EventoMercado;
+import com.inf.iees.bolsavalores.model.Bolsa;
+import com.inf.iees.bolsavalores.model.EventoMercado;
 import org.springframework.stereotype.Component;
 
 @Component

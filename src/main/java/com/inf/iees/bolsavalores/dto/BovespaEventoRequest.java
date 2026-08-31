@@ -1,6 +1,6 @@
 package com.inf.iees.bolsavalores.dto;
 
-import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
+import com.inf.iees.bolsavalores.model.VariacaoMercado;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 

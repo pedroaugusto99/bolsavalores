@@ -77,9 +77,9 @@ controller: pontos de entrada HTTP. Cada bolsa tem o seu, porque cada uma tem um
 
 dto: os contratos externos, no formato em que cada bolsa envia. A NASDAQ manda o campo movement com valores em inglês, a BOVESPA manda o campo variacao com valores em português. Aqui também fica o formato da resposta.
 
-integracao: os adapters, que traduzem cada contrato externo para o modelo interno.
+integration: os adapters, que traduzem cada contrato externo para o modelo interno.
 
-modelo: o modelo interno da aplicação. EventoMercado é a representação padronizada, com bolsa e variacao.
+model: o modelo interno da aplicação. EventoMercado é a representação padronizada, com bolsa e variacao.
 
 service: o MercadoService, onde está a regra de notificação. Ele conhece apenas o EventoMercado e nunca os formatos da NASDAQ ou da BOVESPA.
 

@@ -1,12 +1,12 @@
-package com.inf.iees.bolsavalores.integracao;
+package com.inf.iees.bolsavalores.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.inf.iees.bolsavalores.dto.MovimentoNasdaq;
 import com.inf.iees.bolsavalores.dto.NasdaqEventoRequest;
-import com.inf.iees.bolsavalores.modelo.Bolsa;
-import com.inf.iees.bolsavalores.modelo.EventoMercado;
-import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
+import com.inf.iees.bolsavalores.model.Bolsa;
+import com.inf.iees.bolsavalores.model.EventoMercado;
+import com.inf.iees.bolsavalores.model.VariacaoMercado;
 import org.junit.jupiter.api.Test;
 
 class NasdaqAdapterTest {

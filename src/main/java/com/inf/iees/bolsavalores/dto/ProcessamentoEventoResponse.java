@@ -1,8 +1,8 @@
 package com.inf.iees.bolsavalores.dto;
 
-import com.inf.iees.bolsavalores.modelo.Bolsa;
-import com.inf.iees.bolsavalores.modelo.Cliente;
-import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
+import com.inf.iees.bolsavalores.model.Bolsa;
+import com.inf.iees.bolsavalores.model.Cliente;
+import com.inf.iees.bolsavalores.model.VariacaoMercado;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 

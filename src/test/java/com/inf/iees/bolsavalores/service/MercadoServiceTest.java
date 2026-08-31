@@ -2,11 +2,11 @@ package com.inf.iees.bolsavalores.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.inf.iees.bolsavalores.modelo.Bolsa;
-import com.inf.iees.bolsavalores.modelo.Cliente;
-import com.inf.iees.bolsavalores.modelo.EventoMercado;
-import com.inf.iees.bolsavalores.modelo.TipoCliente;
-import com.inf.iees.bolsavalores.modelo.VariacaoMercado;
+import com.inf.iees.bolsavalores.model.Bolsa;
+import com.inf.iees.bolsavalores.model.Cliente;
+import com.inf.iees.bolsavalores.model.EventoMercado;
+import com.inf.iees.bolsavalores.model.TipoCliente;
+import com.inf.iees.bolsavalores.model.VariacaoMercado;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;

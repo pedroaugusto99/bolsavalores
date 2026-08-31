@@ -1,4 +1,4 @@
-package com.inf.iees.bolsavalores.configuracao;
+package com.inf.iees.bolsavalores.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

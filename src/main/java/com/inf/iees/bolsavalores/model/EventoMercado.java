@@ -1,4 +1,4 @@
-package com.inf.iees.bolsavalores.modelo;
+package com.inf.iees.bolsavalores.model;
 
 import java.util.Objects;
 

@@ -2,9 +2,9 @@ package com.inf.iees.bolsavalores.controller;
 
 import com.inf.iees.bolsavalores.dto.NasdaqEventoRequest;
 import com.inf.iees.bolsavalores.dto.ProcessamentoEventoResponse;
-import com.inf.iees.bolsavalores.integracao.NasdaqAdapter;
-import com.inf.iees.bolsavalores.modelo.Cliente;
-import com.inf.iees.bolsavalores.modelo.EventoMercado;
+import com.inf.iees.bolsavalores.integration.NasdaqAdapter;
+import com.inf.iees.bolsavalores.model.Cliente;
+import com.inf.iees.bolsavalores.model.EventoMercado;
 import com.inf.iees.bolsavalores.service.MercadoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
