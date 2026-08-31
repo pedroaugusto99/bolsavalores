@@ -15,12 +15,12 @@ public class MercadoService {
             new Cliente("Maria", TipoCliente.PREMIUM));
 
     public List<Cliente> processarEventoMercado(EventoMercado evento) {
-        if (evento.variacao() == VariacaoMercado.SEM_ALTERACAO) {
+        if (evento.getVariacao() == VariacaoMercado.SEM_ALTERACAO) {
             return List.of();
         }
 
         List<Cliente> clientesNotificados = CLIENTES.stream()
-                .filter(cliente -> deveNotificar(cliente, evento.variacao()))
+                .filter(cliente -> deveNotificar(cliente, evento.getVariacao()))
                 .toList();
 
         clientesNotificados.forEach(cliente -> notificar(cliente, evento));
@@ -29,15 +29,15 @@ public class MercadoService {
     }
 
     private boolean deveNotificar(Cliente cliente, VariacaoMercado variacao) {
-        return variacao == VariacaoMercado.ALTA || cliente.tipo() == TipoCliente.PREMIUM;
+        return variacao == VariacaoMercado.ALTA || cliente.getTipo() == TipoCliente.PREMIUM;
     }
 
     private void notificar(Cliente cliente, EventoMercado evento) {
-        System.out.println("Notificando " + cliente.nome() + ": " + descrever(evento) + ".");
+        System.out.println("Notificando " + cliente.getNome() + ": " + descrever(evento) + ".");
     }
 
     private String descrever(EventoMercado evento) {
-        return evento.bolsa() + " está em "
-                + (evento.variacao() == VariacaoMercado.ALTA ? "alta" : "baixa");
+        return evento.getBolsa() + " está em "
+                + (evento.getVariacao() == VariacaoMercado.ALTA ? "alta" : "baixa");
     }
 }

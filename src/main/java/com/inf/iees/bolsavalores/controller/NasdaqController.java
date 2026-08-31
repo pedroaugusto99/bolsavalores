@@ -65,6 +65,6 @@ public class NasdaqController {
             @Valid @RequestBody NasdaqEventoRequest request) {
         EventoMercado evento = nasdaqAdapter.paraEventoMercado(request);
         List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(evento);
-        return new ProcessamentoEventoResponse(evento.bolsa(), evento.variacao(), clientesNotificados);
+        return new ProcessamentoEventoResponse(evento.getBolsa(), evento.getVariacao(), clientesNotificados);
     }
 }

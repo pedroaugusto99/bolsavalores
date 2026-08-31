@@ -65,6 +65,6 @@ public class BovespaController {
             @Valid @RequestBody BovespaEventoRequest request) {
         EventoMercado evento = bovespaAdapter.paraEventoMercado(request);
         List<Cliente> clientesNotificados = mercadoService.processarEventoMercado(evento);
-        return new ProcessamentoEventoResponse(evento.bolsa(), evento.variacao(), clientesNotificados);
+        return new ProcessamentoEventoResponse(evento.getBolsa(), evento.getVariacao(), clientesNotificados);
     }
 }
