@@ -18,11 +18,22 @@ Para iniciar a aplicação:
 
 A aplicação sobe em http://localhost:8080
 
-Ao abrir a raiz no navegador, você é redirecionado automaticamente para o Swagger.
+Ao abrir a raiz no navegador, é exibido o painel web. O Swagger continua disponível em http://localhost:8080/swagger-ui.html.
 
 Para rodar os testes:
 
     ./mvnw test
+
+## Interface web
+
+O painel Thymeleaf em `/` permite:
+
+- simular eventos nos formatos da NASDAQ e da BOVESPA;
+- visualizar quais clientes foram notificados;
+- acompanhar e limpar o histórico de notificações;
+- acessar o Swagger pelo botão **Abrir Swagger**.
+
+A interface reutiliza os mesmos adapters e o mesmo serviço dos endpoints REST. O histórico é mantido apenas em memória e é reiniciado quando a aplicação é reiniciada ou uma nova instância é publicada.
 
 ## Endpoints
 
