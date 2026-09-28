@@ -31,7 +31,7 @@ class MercadoServiceTest {
     void prepararCenario() {
         saidaOriginal = System.out;
         System.setOut(new PrintStream(notificacoes, true, StandardCharsets.UTF_8));
-        mercadoService = new MercadoService();
+        mercadoService = new MercadoService(new NotificacaoService());
     }
 
     @AfterEach
