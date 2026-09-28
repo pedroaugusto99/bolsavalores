@@ -4,3 +4,6 @@
 .vscode
 target
 *.iml
+*.log
+.env
+.env.*

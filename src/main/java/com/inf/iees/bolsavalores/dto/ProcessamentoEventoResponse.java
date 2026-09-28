@@ -17,4 +17,13 @@ public record ProcessamentoEventoResponse(
 
         @Schema(description = "Clientes efetivamente notificados neste processamento.")
         List<Cliente> clientesNotificados) {
+
+    public ProcessamentoEventoResponse {
+        clientesNotificados = List.copyOf(clientesNotificados);
+    }
+
+    @Override
+    public List<Cliente> clientesNotificados() {
+        return List.copyOf(clientesNotificados);
+    }
 }

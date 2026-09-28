@@ -10,11 +10,11 @@ Regra de negócio:
 
 ## Como rodar
 
-Pré-requisitos: Java 21 e Maven.
+Pré-requisito: Java 21. O Maven será executado pelo Wrapper incluído no projeto.
 
 Para iniciar a aplicação:
 
-    mvn spring-boot:run
+    ./mvnw spring-boot:run
 
 A aplicação sobe em http://localhost:8080
 
@@ -22,7 +22,7 @@ Ao abrir a raiz no navegador, você é redirecionado automaticamente para o Swag
 
 Para rodar os testes:
 
-    mvn test
+    ./mvnw test
 
 ## Endpoints
 
