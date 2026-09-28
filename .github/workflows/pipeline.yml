@@ -152,11 +152,30 @@ jobs:
           bolsa-valores:ci
 
       - name: Check container health
-        run: >-
-          curl --silent --show-error --fail
-          --retry 20 --retry-delay 2 --retry-connrefused
-          http://localhost:8080/actuator/health
-          | jq --exit-status '.status == "UP"'
+        shell: bash
+        run: |
+          for attempt in {1..30}; do
+            if response="$(curl --silent --show-error --fail \
+              http://127.0.0.1:8080/actuator/health 2>/dev/null)" \
+              && jq --exit-status ".status == \"UP\"" \
+                <<<"${response}" >/dev/null; then
+              echo "Application is healthy (attempt ${attempt}/30)."
+              exit 0
+            fi
+
+            if ! docker inspect --format="{{.State.Running}}" \
+              bolsa-valores-ci | grep --quiet "^true$"; then
+              echo "::error::Container stopped before becoming healthy."
+              docker logs bolsa-valores-ci
+              exit 1
+            fi
+
+            sleep 2
+          done
+
+          echo "::error::Application did not become healthy within 60 seconds."
+          docker logs bolsa-valores-ci
+          exit 1
 
       - name: Stop container
         if: ${{ always() && steps.start-container.outcome == 'success' }}
