@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Bolsa de Valores</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="container">
+    <header class="page-header">
+        <div>
+            <h1>Painel de Bolsa de Valores</h1>
+        </div>
+        <a class="secondary-button" th:href="@{/swagger-ui.html}">Abrir Swagger</a>
+    </header>
+
+    <div class="alert" th:if="${mensagem}" th:text="${mensagem}"></div>
+
+    <section class="grid two-columns">
+        <article class="card market-card">
+            <div class="card-heading">
+                <div>
+                    <h2>NASDAQ</h2>
+                </div>
+            </div>
+            <form th:action="@{/painel/nasdaq}" method="post">
+                <label for="movement">Movimento</label>
+                <select id="movement" name="movement">
+                    <option value="UP">UP</option>
+                    <option value="DOWN">DOWN</option>
+                    <option value="UNCHANGED">UNCHANGED</option>
+                </select>
+                <button type="submit">Processar NASDAQ</button>
+            </form>
+        </article>
+
+        <article class="card market-card">
+            <div class="card-heading">
+                <div>
+                    <h2>BOVESPA</h2>
+                </div>
+            </div>
+            <form th:action="@{/painel/bovespa}" method="post">
+                <label for="variacao">Variação</label>
+                <select id="variacao" name="variacao">
+                    <option value="ALTA">ALTA</option>
+                    <option value="BAIXA">BAIXA</option>
+                    <option value="SEM_ALTERACAO">SEM_ALTERACAO</option>
+                </select>
+                <button type="submit">Processar BOVESPA</button>
+            </form>
+        </article>
+    </section>
+
+    <section class="card section-card">
+        <div class="section-heading">
+            <div>
+                <h2>Notificações</h2>
+            </div>
+            <form th:if="${!#lists.isEmpty(notificacoes)}" th:action="@{/painel/notificacoes/limpar}" method="post">
+                <button type="submit" class="danger-button">Limpar histórico</button>
+            </form>
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(notificacoes)}">
+            <strong>Nenhuma notificação gerada.</strong>
+            <span>Processe um evento de alta ou baixa para visualizar o resultado.</span>
+        </div>
+
+        <div class="table-wrapper" th:if="${!#lists.isEmpty(notificacoes)}">
+            <table>
+                <thead>
+                <tr>
+                    <th>Horário</th>
+                    <th>Bolsa</th>
+                    <th>Variação</th>
+                    <th>Cliente</th>
+                    <th>Tipo</th>
+                    <th>Mensagem</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="notificacao : ${notificacoes}">
+                    <td th:text="${notificacao.horarioFormatado}">00/00/0000 00:00:00</td>
+                    <td><strong th:text="${notificacao.bolsa}">NASDAQ</strong></td>
+                    <td>
+                        <span th:class="${notificacao.variacao.name() == 'ALTA'} ? 'movement up' : 'movement down'"
+                              th:text="${notificacao.variacao}">ALTA</span>
+                    </td>
+                    <td th:text="${notificacao.cliente.nome}">Cliente</td>
+                    <td>
+                        <span th:class="${notificacao.cliente.tipo.name() == 'PREMIUM'} ? 'badge premium' : 'badge comum'"
+                              th:text="${notificacao.cliente.tipo}">COMUM</span>
+                    </td>
+                    <td th:text="${notificacao.mensagem}">NASDAQ está em alta</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>
